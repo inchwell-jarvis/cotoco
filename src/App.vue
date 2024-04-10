@@ -1,30 +1,55 @@
 <template>
 	<div id="app">
-		Jarvis Downey
 		<router-view />
 	</div>
 </template>
 
 <script>
+import header22 from "./components/header";
 export default {
 	name: "App",
+	components: {
+		header22: header22,
+	},
 };
 </script>
 
-<style>
-body {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
+<style lang="scss">
+* {
+	padding: 0;
 	margin: 0;
 }
 
+body,
+html,
 #app {
+	width: 100%;
+	height: 100%;
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: #2c3e50;
-	font-size: 100px;
+}
+
+// 给所有的div修改滚动条样式
+div::-webkit-scrollbar {
+	/*滚动条整体样式*/
+	width: 5px;
+	/*高宽分别对应横竖滚动条的尺寸*/
+	height: 1px;
+}
+
+div::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+	border-radius: 10px;
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	background: #535353;
+}
+
+div::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	border-radius: 10px;
+	background: #ededed;
 }
 </style>
