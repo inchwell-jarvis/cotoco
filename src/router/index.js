@@ -5,7 +5,13 @@ Vue.use(Router)
 
 export default new Router({
     routes: [
-        { path: '/', name: 'index', component: resolve => require(['@/pages/index'], resolve) }
+        {
+            path: '/', name: 'home', component: resolve => require(['@/pages/home'], resolve), redirect: "/index",
+
+            children: [
+                { path: '/index', name: 'index', component: resolve => require(['@/pages/content/index'], resolve), },
+            ]
+        }
 
     ]
 })

@@ -3,7 +3,7 @@
 		<div class="headers_content">
 			<!-- icon -->
 			<div class="icon">
-				<img src="../assets/favicon.png" alt="">
+				<img src="../../public/images/favicon.png" alt="">
 			</div>
 			<!-- text -->
 			<div class="text">
@@ -18,7 +18,7 @@
 				<span>支持</span>
 				<span class="none">|</span>
 				<span>
-					<img src="../assets/github-fill.png" alt="">
+					<img src="../../public/images/github-fill.png" alt="">
 				</span>
 
 			</div>
@@ -61,7 +61,6 @@ export default {
 			height: 100%;
 			line-height: 55px;
 			font-size: 20px;
-			color: #273849;
 			float: left;
 			font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 			cursor: pointer;
@@ -70,9 +69,10 @@ export default {
 			min-width: 100px;
 			height: 100%;
 			float: right;
-			color: #273849;
 			line-height: 55px;
-			font-size: 13px;
+			font-size: 14px;
+			font-weight: bold;
+			font-family: 'HarmonyOS';
 			span {
 				display: block;
 				height: 100%;
