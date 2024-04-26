@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'HarmonyOS';
-    src: url('../../../public/fonts/HarmonyOS.woff2');
+    src: url('../fonts/HarmonyOS.woff2');
 }
 @font-face {
     font-family: 'HarmonyOS_bold';
-    src: url('../../../public/fonts/HarmonyOS_b.woff2');
+    src: url('../fonts/HarmonyOS_b.woff2');
 }

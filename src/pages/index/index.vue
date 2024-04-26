@@ -1,7 +1,9 @@
 <template>
 	<div class='box'>
-		<p>index</p>
-		<p>声音传播需要时间，我们面对面交谈，我在过去，你在未来</p>
+		<div>
+			<img src="../../../public/images/favicon.png" alt="">
+			<p>声音传播需要时间，我们面对面交谈 <br>我在过去，你在未来</p>
+		</div>
 	</div>
 </template>
 <script>
@@ -42,13 +44,18 @@ export default {
 <style lang='scss' scoped>
 .box {
 	text-align: center;
-	line-height: 400px;
-    overflow: auto;
+	overflow: auto;
 	font-weight: bold;
 	font-family: "HarmonyOS_bold";
-
-	p:nth-child(1) {
-		font-size: 100px;
+	display: flex;
+	justify-content: center; /* 水平居中 */
+	align-items: center; /* 垂直居中 */
+	img {
+		width: 100px;
+	}
+	p {
+		width: 90%;
+		line-height: 30px;
 	}
 }
 </style>
