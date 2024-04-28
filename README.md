@@ -1,4 +1,4 @@
-# games
+# cotoco
 
 > A Vue.js project
 
