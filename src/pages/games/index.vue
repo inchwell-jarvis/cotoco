@@ -31,16 +31,6 @@
 				</svg>
 				{{ gameTime }}
 			</div>
-
-			<!-- 全部设置 -->
-			<!-- <div class="operationli">
-				<svg t="1714123310448" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2518" width="200" height="200">
-					<path
-						d="M805.236364 280.824242H280.824242c-9.309091 0-15.515152-6.206061-15.515151-15.515151s6.206061-15.515152 15.515151-15.515152h524.412122c9.309091 0 15.515152 6.206061 15.515151 15.515152s-6.206061 15.515152-15.515151 15.515151zM805.236364 532.169697H280.824242c-9.309091 0-15.515152-6.206061-15.515151-15.515152s6.206061-15.515152 15.515151-15.515151h524.412122c9.309091 0 15.515152 6.206061 15.515151 15.515151s-6.206061 15.515152-15.515151 15.515152zM805.236364 766.448485H280.824242c-9.309091 0-15.515152-6.206061-15.515151-15.515152s6.206061-15.515152 15.515151-15.515151h524.412122c9.309091 0 15.515152 6.206061 15.515151 15.515151s-6.206061 15.515152-15.515151 15.515152zM218.763636 280.824242h-4.654545c-9.309091 0-15.515152-6.206061-15.515152-15.515151s6.206061-15.515152 15.515152-15.515152h4.654545c9.309091 0 15.515152 6.206061 15.515152 15.515152s-7.757576 15.515152-15.515152 15.515151zM218.763636 532.169697h-4.654545c-9.309091 0-15.515152-6.206061-15.515152-15.515152s6.206061-15.515152 15.515152-15.515151h4.654545c9.309091 0 15.515152 6.206061 15.515152 15.515151s-7.757576 15.515152-15.515152 15.515152zM218.763636 766.448485h-4.654545c-9.309091 0-15.515152-6.206061-15.515152-15.515152s6.206061-15.515152 15.515152-15.515151h4.654545c9.309091 0 15.515152 6.206061 15.515152 15.515151s-7.757576 15.515152-15.515152 15.515152z"
-						fill="#2c3e50" p-id="2519"></path>
-				</svg>
-				其他
-			</div> -->
 		</div>
 		<!-- 消息 -->
 		<div class="message" :class="{'message_height40':gameState!= 0, 'message_win':gameState == 1,'message_fail':gameState == 2}">
@@ -78,8 +68,8 @@ export default {
 	// 定义属性
 	data() {
 		return {
-			x: 10,
-			y: 10,
+			x: 20,
+			y: 20,
 			grid: [], // 二维数组表示游戏棋盘
 			revealedCells: [], // 记录已经揭示的格子
 			numMines: 0,
@@ -87,11 +77,13 @@ export default {
 			gameState: 0,// 0 正在进行中 1 成功 2 失败
 			stopTimer: null,// 计时
 			gameTime: '00:00',
+
+			complete: false,//棋局生成完成
+			easyStart: true,// 轻松开局
 		};
 	},
 	// 方法集合
 	methods: {
-
 
 		// 生成棋盘
 		start() {
@@ -103,8 +95,6 @@ export default {
 					isMarked: false,//是否被标记
 				}))
 			);
-			this.placeMines();
-			this.calculateAdjacentMines();
 
 			setTimeout(this.stopTimer, 0);
 			this.gameTime = '00:00'
@@ -112,20 +102,25 @@ export default {
 			this.stopTimer = this.startTimer();
 		},
 
-
-		// 在棋盘上随机放置地雷
-		placeMines() {
+		// 随机生成地雷的位置 且 接收设置第一下绝不是雷的坐标
+		placeMines(excludedRow, excludedCol) {
 			let minesPlaced = 0;
 			while (minesPlaced < this.numMines) {
+				// 随机生成地雷的位置
 				const row = Math.floor(Math.random() * this.x);
 				const col = Math.floor(Math.random() * this.y);
-				if (!this.grid[row][col].isMine) {
-					this.grid[row][col].isMine = true;
-					minesPlaced++;
+				// 检查是否传入了排除的位置参数，并且生成的位置是否与排除的位置相同
+				if ((excludedRow === undefined || row !== excludedRow) && (excludedCol === undefined || col !== excludedCol)) {
+					// 如果该位置不是已经有地雷，将地雷放置在该位置，并增加放置的地雷数量
+					if (!this.grid[row][col].isMine) {
+						this.grid[row][col].isMine = true;
+						minesPlaced++;
+					}
 				}
 			}
-		},
 
+			this.complete = true
+		},
 
 		// 计算每个格子周围的地雷数量
 		calculateAdjacentMines() {
@@ -139,7 +134,6 @@ export default {
 				}
 			}
 		},
-
 
 		// 获取某个格子周围的相邻格子
 		getAdjacentCells(row, col) {
@@ -155,10 +149,21 @@ export default {
 			return adjacentCells;
 		},
 
-
-
 		// 揭示格子
 		revealCell(row, col) {
+
+			// 没生成棋局就生成
+			if (this.complete == false) {
+				// 判断是否要轻松开局
+				if (this.easyStart == false) {
+					this.placeMines();
+				} else {
+					this.placeMines(row, col);
+				}
+			}
+			// 计算周围的雷数
+			this.calculateAdjacentMines();
+
 			// 检查 row 和 col 是否在合法范围内
 			if (row < 0 || row >= this.x || col < 0 || col >= this.y) return;
 
@@ -191,7 +196,9 @@ export default {
 				const adjacentCells = this.getAdjacentCells(row, col);
 				adjacentCells.forEach(cell => {
 					const { row, col } = cell;
-					this.revealCell(row, col); // 递归调用 revealCell 揭示相邻格子
+					setTimeout(() => {
+						this.revealCell(row, col); // 递归调用 revealCell 揭示相邻格子
+					}, 200);
 				});
 			}
 
@@ -202,6 +209,7 @@ export default {
 
 		// 计算是否通关
 		checkGameWin() {
+			console.log('计算是否通关')
 			for (let i = 0; i < this.x; i++) {
 				for (let j = 0; j < this.y; j++) {
 					const cell = this.grid[i][j];
@@ -233,17 +241,17 @@ export default {
 			this.$set(this.grid, row, this.grid[row]);
 		},
 
-
 		// 重新开始游戏
 		reset() {
 			this.revealedCells = [];
-			this.numMines = Math.max(1, Math.floor((this.x * this.y) / 10) + (Math.floor(Math.random() * 11) - 3));
+			this.numMines = Math.max(1, Math.floor((this.x * this.y) * 0.2) + (Math.floor(Math.random() * 11) - 3));
+			// this.numMines = 80
 			this.gameState = 0
+			this.complete = false
 			this.start();
 		},
 
-
-
+		// 计时函数
 		startTimer() {
 			let seconds = 0;
 			let that = this
