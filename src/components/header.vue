@@ -49,6 +49,11 @@ export default {
 					page: 'index'
 				},
 				{
+					name: '变量命名',
+					bool: false,
+					page: 'variable-naming'
+				},
+				{
 					name: '游戏',
 					bool: false,
 					page: 'games'
