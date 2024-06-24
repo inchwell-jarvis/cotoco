@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import utils from './utils.js'                                        // 封装function 方法
+import ElementUI from 'element-ui'                                      //  UI
+import 'element-ui/lib/theme-chalk/index.css'                           //  ui
+Vue.use(ElementUI)                              //使用ElementUI 
 
 
 // 样式

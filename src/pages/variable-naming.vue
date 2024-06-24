@@ -8,12 +8,20 @@
 						<textarea class="dzm-textarea" name="textarea" v-model="textarea" placeholder="请输入内容"></textarea>
 					</div>
 				</div>
-				<div class="variable_naming_item variable_naming_input">
+				<div class="variable_naming_item variable_naming_input" style="overflow: auto;">
 					<!-- 无结果 -->
 					<p v-if="textarea == ''">译文</p>
 
-					<div>
-						{{ textarea }}
+					<div class="container" v-for="(item, key) in data" :key="key">
+						<h3 class="header">{{ key }}</h3>
+						<div class="item" v-for="(item2, key2) in item" :key="key2" @click="copy(item2)">
+							<div class="key">{{ key2 }}</div>
+							<div class="value">{{ item2 }}</div>
+<!-- 
+							<span class="copy">
+								左键复制
+							</span> -->
+						</div>
 					</div>
 				</div>
 			</div>
@@ -21,11 +29,16 @@
 	</div>
 </template>
 <script>
+import md5 from "md5";//在使用的页面引入加密插件
 export default {
 	// 定义属性
 	data() {
 		return {
-			textarea: ''
+			textarea: '',
+			result: '',
+			data: {},
+			appid: '20230209001555364', // APPID	
+			key: 'a2CUhlNC3T6DLvq7onl4',	// KEY
 		};
 	},
 	// 计算属性，会监听依赖属性值随之变化
@@ -34,21 +47,107 @@ export default {
 	// 监控data中的数据变化
 	watch: {
 		textarea() {
-			this.apix('http://39.100.116.85:6001/api/account/login', { from: 2, password: "163", radio: true, username: "gotoadmin" }, { method: 'POST' })
-				.then(rv => {
-					console.log(rv)
-				})
+			this.translate()
 		}
 	},
 	// 方法集合
 	methods: {
-		// 获取数据
-		start() {
+		translate() {
+			console.log(this.textarea)
+			if (this.textarea.trim() == '') {
+				this.result = ''
+				return false
+			}
+
+			let salt = (new Date).getTime()
+			let condition = {
+				q: this.textarea,  // 请求翻译query	
+				appid: this.appid, // APPID	
+				salt: salt, // 随机数
+				from: 'auto', // 翻译源语言
+				to: 'en', // 翻译目标语言	
+				sign: md5(this.appid + this.textarea + salt + this.key)	// 签名
+			}
+			this.apix('proxy/api/trans/vip/translate', condition, { method: 'GET' })
+				.then(rv => {
+					console.log(rv)
+					this.result = rv.trans_result[0].dst
+					this.data = this.convertNamingConventions(this.result).data
+					console.log(this.data)
+				})
 		},
+		convertNamingConventions(input) {
+			// 去除前后空格并将字符串转换为小写
+			const words = input.trim().toLowerCase().split(/\s+/);
+			const camelCase = words.map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)).join('');
+			const pascalCase = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+			const constantCase = words.map(word => word.toUpperCase()).join('_');
+			const snakeCase = words.join('_');
+			const kebabCase = words.join('-');
+			const underscoreCase = `_${snakeCase}`;
+
+			return {
+				"data": {
+					"常见命名": {
+						"常量": constantCase,
+						"大驼峰(类命名)": pascalCase,
+						"小驼峰(方法命名)": camelCase,
+						"下划线": snakeCase,
+						"前下划线": underscoreCase,
+						"项目名": kebabCase
+					},
+					"变量命名": {
+						"全局变量(驼峰)": `g${pascalCase}`,
+						"全局变量(下划线)": `g_${camelCase}`,
+						"字符串变量(驼峰)": `s${pascalCase}`,
+						"字符串变量(下划线)": `s_${camelCase}`,
+						"数字变量(驼峰)": `n${pascalCase}`,
+						"数字变量(下划线)": `n_${camelCase}`,
+						"逻辑变量(驼峰)": `b${pascalCase}`,
+						"逻辑变量(下划线)": `b_${camelCase}`,
+						"数组变量(驼峰)": `a${pascalCase}`,
+						"数组变量(下划线)": `a_${camelCase}`,
+						"正则命名(驼峰)": `r${pascalCase}`,
+						"正则命名(下划线)": `r_${camelCase}`,
+						"函数命名(驼峰)": `f${pascalCase}`,
+						"函数命名(下划线)": `f_${camelCase}`,
+						"成员变量(驼峰)": `m${pascalCase}`,
+						"成员变量(下划线)": `m_${camelCase}`
+					},
+					"方法命名": {
+						"加载方法": `load${pascalCase}`,
+						"判断执行": `can${pascalCase}`,
+						"判断包含": `has${pascalCase}`,
+						"判断存在": `is${pascalCase}`,
+						"事件函数": `fn${pascalCase}`,
+						"接口类": `I${pascalCase}`,
+						"接口实现类": `${pascalCase}Impl`,
+						"get方法": `get${pascalCase}`,
+						"set方法": `set${pascalCase}`,
+						"查询方法": `query${pascalCase}`,
+						"查看方法": `view${pascalCase}`,
+						"详情方法": `${camelCase}Details`,
+						"读取方法": `read${pascalCase}`,
+						"创建方法": `create${pascalCase}`,
+						"保存方法": `save${pascalCase}`,
+						"新增方法": `add${pascalCase}`,
+						"生成方法": `emit${pascalCase}`,
+						"更新方法": `update${pascalCase}`,
+						"编辑方法": `edit${pascalCase}`,
+						"清除方法": `clear${pascalCase}`,
+						"删除方法": `remove${pascalCase}`,
+						"移除方法": `destory${pascalCase}`,
+						"上传方法": `upload${pascalCase}`,
+						"下载方法": `down${pascalCase}`
+					}
+				}
+			};
+		}
+
 	},
 	// 生命周期 - 创建完成（可以访问当前this实例）
 	created() {
-		this.start();
+
 	},
 	// 生命周期 - 挂载完成（可以访问DOM元素）
 	mounted() { },
@@ -115,6 +214,7 @@ export default {
 						width: 100%;
 						height: 100%;
 						content: none;
+						resize: none;
 						padding: 5px;
 						outline: none;
 						border: none;
@@ -126,6 +226,49 @@ export default {
 					.dzm-textarea::-webkit-input-placeholder {
 						color: #ddd;
 					}
+				}
+			}
+			//
+			.container {
+				width: 100%;
+
+				.header {
+					font-size: 16px;
+					line-height: 40px;
+				}
+
+				.item {
+					font-size: 14px;
+					line-height: 26px;
+					width: 100%;
+					min-height: 30px;
+					padding-left: 50px;
+					box-sizing: border-box;
+					cursor: pointer;
+					overflow: hidden;
+					border-radius: 6px;
+
+					.key {
+						float: left;
+						width: 150px;
+						height: 30px;
+						line-height: 30px;
+					}
+					.value{
+						width: calc(100% - 200px);
+						min-height: 30px;
+						line-height: 30px;
+						float: left;
+						word-wrap: break-word;
+					}
+
+				}
+				.item:hover {
+					background: rgb(66, 184, 131);
+					color: #ffffff;
+					// .value {
+					// 	color: #007fff;
+					// }
 				}
 			}
 		}

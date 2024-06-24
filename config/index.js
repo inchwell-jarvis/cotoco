@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/proxy': {
         // target: 'http://39.100.116.85:6001',
-        target: 'https://www.itnan.cc',
+        target: 'https://fanyi-api.baidu.com',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
