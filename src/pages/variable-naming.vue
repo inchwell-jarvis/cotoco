@@ -10,19 +10,20 @@
 				</div>
 				<div class="variable_naming_item variable_naming_input" style="overflow: auto;">
 					<!-- 无结果 -->
-					<p v-if="textarea == ''">译文</p>
+					<p v-if="textarea.trim() == ''">译文</p>
 
-					<div class="container" v-for="(item, key) in data" :key="key">
+					<div v-show="textarea.trim() != ''" class="container" v-for="(item, key) in data" :key="key">
 						<h3 class="header">{{ key }}</h3>
 						<div class="item" v-for="(item2, key2) in item" :key="key2" @click="copy(item2)">
 							<div class="key">{{ key2 }}</div>
 							<div class="value">{{ item2 }}</div>
-<!-- 
+							<!-- 
 							<span class="copy">
 								左键复制
 							</span> -->
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -169,7 +170,8 @@ export default {
 
 	.variable_naming {
 		width: calc(100% - 80px);
-		height: calc(100% - 80px);
+		max-width: 1450px;
+		height: calc(100% - 60px);
 		background: rgb(255, 255, 255);
 		box-sizing: border-box;
 		border: 1px solid rgb(242, 243, 245);
@@ -239,7 +241,6 @@ export default {
 
 				.item {
 					font-size: 14px;
-					line-height: 26px;
 					width: 100%;
 					min-height: 30px;
 					padding-left: 50px;
@@ -254,21 +255,17 @@ export default {
 						height: 30px;
 						line-height: 30px;
 					}
-					.value{
+					.value {
 						width: calc(100% - 200px);
 						min-height: 30px;
 						line-height: 30px;
 						float: left;
 						word-wrap: break-word;
 					}
-
 				}
 				.item:hover {
 					background: rgb(66, 184, 131);
 					color: #ffffff;
-					// .value {
-					// 	color: #007fff;
-					// }
 				}
 			}
 		}

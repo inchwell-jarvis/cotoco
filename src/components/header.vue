@@ -54,7 +54,12 @@ export default {
 					page: 'variable-naming'
 				},
 				{
-					name: '游戏',
+					name: '随机密码',
+					bool: false,
+					page: 'random_password'
+				},
+				{
+					name: '扫雷',
 					bool: false,
 					page: 'games'
 				},
@@ -78,7 +83,7 @@ export default {
 	// 监控data中的数据变化
 	watch: {
 		$route(to) {
-			console.log(to.matched[1].name)
+			// console.log(to.matched[1].name)
 			this.menu.forEach(rv => {
 				rv['bool'] = to.matched[1].name == rv.page
 			})
@@ -88,7 +93,7 @@ export default {
 	methods: {
 		// 获取数据
 		path(item) {
-			console.log(item)
+			// console.log(item)
 			this.$router.push({ path: item.page })
 		},
 		// 

@@ -18,6 +18,7 @@ export default new Router({
                 { path: '/games', name: 'games', component: resolve => require(['@/pages/games/index'], resolve), },
                 { path: '/about', name: 'about', component: resolve => require(['@/pages/about/index'], resolve), },
                 { path: '/variable-naming', name: 'variable-naming', component: resolve => require(['@/pages/variable-naming'], resolve), },
+                { path: '/random_password', name: 'random_password', component: resolve => require(['@/pages/random_password'], resolve), },
             ]
         }
 
