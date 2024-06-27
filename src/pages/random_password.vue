@@ -17,7 +17,7 @@
 						</el-form-item>
 
 						<el-form-item label="密码长度">
-							<el-input-number v-model="form.length" :min="1" :max="99" label="密码长度"></el-input-number>
+							<el-input-number v-model="form.length" :min="1" :max="199" label="密码长度"></el-input-number>
 						</el-form-item>
 
 						<el-form-item label="生成数量">
@@ -103,11 +103,9 @@ export default {
 				for (let j = 0; j < data.length; j++) {
 					const randomIndex = Math.floor(Math.random() * characters.length);
 					password += characters[randomIndex];
-				}
+				}		
 				this.passwords.push(password);
 			}
-
-			// console.log(this.passwords)
 		}
 
 	},
@@ -179,6 +177,8 @@ export default {
 					cursor: pointer;
 					overflow: hidden;
 					border-radius: 6px;
+					word-wrap: break-word; /* 或者 overflow-wrap: break-word; */
+					word-break:break-all;
 				}
 				.uuid:hover {
 					background: rgb(66, 184, 131);

@@ -69,7 +69,7 @@ export default {
 				to: 'en', // 翻译目标语言	
 				sign: md5(this.appid + this.textarea + salt + this.key)	// 签名
 			}
-			this.apix('proxy/api/trans/vip/translate', condition, { method: 'GET' })
+			this.apix('/proxy/api/trans/vip/translate', condition, { method: 'GET' })
 				.then(rv => {
 					console.log(rv)
 					this.result = rv.trans_result[0].dst

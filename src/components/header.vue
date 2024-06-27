@@ -3,7 +3,7 @@
 		<div class="headers_content">
 			<!-- icon -->
 			<div class="icon">
-				<img src="../../public/images/favicon.png" alt="">
+				<img src="../assets/images/favicon.png" alt="">
 			</div>
 			<!-- text -->
 			<div class="text">
@@ -97,7 +97,7 @@ export default {
 			this.$router.push({ path: item.page })
 		},
 		// 
-		path_games(){
+		path_games() {
 			this.$router.push({ path: '/games' })
 		}
 	},
@@ -126,6 +126,8 @@ export default {
 		width: 1450px;
 		height: 100%;
 		margin: auto;
+		position: relative;
+
 		.icon {
 			width: 55px;
 			height: 55px;
@@ -149,13 +151,18 @@ export default {
 		}
 		.operation,
 		.operation_max750 {
-			min-width: 100px;
+			min-width: 0px;
 			height: 100%;
 			float: right;
 			line-height: 55px;
 			font-size: 14px;
 			font-weight: bold;
 			font-family: "HarmonyOS";
+			transition: 0.5s linear;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+
 			span {
 				display: block;
 				height: 100%;
@@ -187,22 +194,22 @@ export default {
 				color: #bcb9b9;
 			}
 		}
-	}
-	.operation_max750 {
-		display: none;
+		.operation_max750 {
+			right: -800px;
+		}
+
+		@media screen and (max-width: 800px) {
+			.operation {
+				right: -800px !important;
+			}
+			.operation_max750 {
+				right: 0px;
+			}
+		}
 	}
 	@media screen and (max-width: 1450px) {
 		.headers_content {
 			width: 100%;
-		}
-	}
-
-	@media screen and (max-width: 750px) {
-		.operation {
-			display: none;
-		}
-		.operation_max750 {
-			display: block;
 		}
 	}
 }
