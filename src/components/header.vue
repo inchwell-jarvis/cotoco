@@ -22,7 +22,7 @@
 				</span>
 			</div>
 
-			<div class="operation_max750" @click="path_games()">
+			<div class="operation_max750">
 				<span class="none">
 					<svg t="1714094151416" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7255" width="200" height="200">
 						<path d="M129.910448 132.457711m50.945273 0l244.537314 0q50.945274 0 50.945273 50.945274l0 244.537314q0 50.945274-50.945273 50.945273l-244.537314 0q-50.945274 0-50.945273-50.945273l0-244.537314q0-50.945274 50.945273-50.945274Z" fill="#2c3e50" p-id="7256"></path>
@@ -95,10 +95,6 @@ export default {
 		path(item) {
 			// console.log(item)
 			this.$router.push({ path: item.page })
-		},
-		// 
-		path_games() {
-			this.$router.push({ path: '/games' })
 		}
 	},
 	// 生命周期 - 挂载完成（可以访问DOM元素）
@@ -121,6 +117,7 @@ export default {
 	box-sizing: border-box;
 	user-select: none;
 	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
 
 	.headers_content {
 		width: 1450px;

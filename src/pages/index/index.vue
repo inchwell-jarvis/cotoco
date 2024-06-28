@@ -3,22 +3,11 @@
 		<div class="content">
 
 			<div class="introduce">
+
 				<div class="introduce_l">
-					<div class="header">
-						<div class="but">
-							<div class="button">cotoco</div>
-							<p>日常编程工作的得力助手</p>
-						</div>
-					</div>
-					<div class="img">
-						<img src="../../assets/images/favicon.png" alt="">
-					</div>
+					<img src="../../assets/images/favicon.png" alt="">
 				</div>
-				<!-- <div class="introduce_z">
-					<i class="el-icon-edit"></i>
-					<i class="el-icon-magic-stick"></i>
-					<i class="el-icon-ship"></i>
-				</div> -->
+
 				<div class="introduce_r">
 					<div class="introduce_r_item">
 						<div class="introduce_r_item_icon">
@@ -102,104 +91,37 @@ export default {
 
 		.introduce {
 			width: 80%;
-			height: 600px;
-			// background: #000;
+			min-height: 100px;
 			position: absolute;
 			top: 0;
 			left: 0;
 			right: 0;
 			bottom: 0;
 			margin: auto;
+			transition: all 0.5s;
+			display: flex;
+			flex-direction: row; /* 子元素水平排列，默认值，可以不写 */
+			justify-content: flex-start; /* 子元素从左边开始排列，默认值，可以不写 */
+			align-items: center; /* 子元素在交叉轴上居中对齐 */
 
 			.introduce_l {
-				width: 40%;
-				height: 100%;
-				float: left;
+				width: 34%;
+				min-height: 100px;
 				transition: all 0.5s;
-				.header {
-					width: 100%;
-					height: 150px;
-					padding: 30px 20px 0;
-					box-sizing: border-box;
-					.but {
-						width: 260px;
-						height: 100%;
-						float: right;
 
-						@keyframes colorCycle {
-							0%,
-							100% {
-								box-shadow: 0 2px 12px 0 #8591a4; /* 开始和结束时的阴影颜色 */
-							}
-							50% {
-								box-shadow: 0 2px 12px 0 #e5e7eb; /* 中间状态的阴影颜色 */
-							}
-						}
-
-						.button {
-							width: 200px;
-							height: 50px;
-							animation: colorCycle 4s infinite alternate; /* 应用动画，每2秒切换一次颜色，无限次数，反向播放 */
-							border-radius: 10px;
-							margin: 10px auto;
-							text-align: center;
-							line-height: 50px;
-							font-size: 30px;
-							color: #8591a4;
-							user-select: none;
-						}
-
-						p {
-							line-height: 40px;
-							text-indent: 15%;
-							font-size: 16px;
-						}
-					}
-				}
-				.img {
-					width: 100%;
-					height: calc(100% - 200px);
-					img {
-						width: 70%;
-						float: right;
-					}
-				}
-			}
-
-			.introduce_icon {
-				width: 10%;
-				height: 100%;
-				float: left;
-				transition: all 0.5s;
-				i {
+				img {
 					display: block;
-					width: 50px;
-					height: 50px;
-					// background: #000;
-					font-size: 30px;
-					text-align: center;
-					line-height: 50px;
-					border: 1px solid #e5e7eb;
-					border-radius: 6px;
-					cursor: pointer;
-				}
-				i:nth-of-type(1) {
-					margin: 20px auto 0;
-				}
-				i:nth-of-type(2) {
-					margin: 100px auto 0;
-				}
-				i:nth-of-type(3) {
-					margin: 100px auto 0;
+					width: 80%;
+					margin: auto;
 				}
 			}
 
 			.introduce_r {
-				width: 60%;
-				height: 100%;
-				float: left;
+				width: 66%;
+				min-height: 100px;
 				box-sizing: border-box;
 				transition: all 0.5s;
+
 				.introduce_r_item {
 					width: 100%;
 					min-height: 0px;
@@ -243,16 +165,24 @@ export default {
 
 			@media screen and (max-width: 800px) {
 				.introduce_l {
-					width: 0px;
-					height: 0px;
-					overflow: hidden;
-				}
-				.introduce_z {
-					width: 20%;
+					width: 100%;
+					img {
+						width: 50%;
+						margin: 50px auto;
+					}
 				}
 				.introduce_r {
-					width: 80%;
+					width: 100%;
 				}
+			}
+		}
+
+		@media screen and (max-width: 800px) {
+			.introduce {
+				display: flex; /* 启用 Flexbox */
+				flex-direction: column; /* 子元素垂直排列 */
+				justify-content: flex-start; /* 子元素从顶部开始排列，默认值，可以不写 */
+				align-items: center; /* 子元素在交叉轴上居中对齐 */
 			}
 		}
 	}
