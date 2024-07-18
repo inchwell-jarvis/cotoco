@@ -1,6 +1,23 @@
 import axios from "axios"; // 引入 axios 库
 import { Message as message } from "element-ui"; // 引入 Element UI 的消息组件，并重命名为 message
 
+let err_message = {
+    "52000": "成功",
+    "52001": "请求超时",
+    "52002": "系统错误",
+    "52003": "未授权用户",
+    "54000": "必填参数为空",
+    "54001": "签名错误",
+    "54003": "访问频率受限",
+    "54004": "账户余额不足",
+    "54005": "长query请求频繁",
+    "58000": "客户端IP非法",
+    "58001": "译文语言方向不支持",
+    "58002": "服务当前已关闭",
+    "90107": "认证未通过或未生效",
+    "20003": "请求内容存在安全风险"
+}
+
 /**
  * 通用请求函数
  * @param {string} url - 请求地址
@@ -43,17 +60,12 @@ export default async function request(url, data = {}, options = {}) {
         try {
             const response = await axios(axiosConfig); // 发起 axios 请求并等待响应
 
-            // let responseData = typeof response.data === "string" ? JSON.parse(response.data) : response.data; // 解析响应数据
             resolve(response.data)
-            // if (defaultOptions.pop_err && responseData.Code !== 0) { // 如果需要弹出错误信息且接口返回非 0 状态码
-            //     message({ message: responseData.Msg, type: "error" }); // 弹出错误信息
-            // }
-
-            // if (responseData.Code === 0 || defaultOptions.err_data) { // 如果接口成功或需要返回错误数据
-            //     resolve(defaultOptions.source_data ? responseData : responseData.Data); // 返回响应数据
-            // }
+            
+            if (response.data.error_code && response.data.error_code != '52000') message({ message: err_message[response.data.error_code], type: "error" }); // 弹出错误信息
 
         } catch (error) {
+            console.log(error)
             reject(error); // 捕获错误并拒绝 Promise
 
             if (defaultOptions.pop_err) { // 如果需要弹出错误信息

@@ -1,7 +1,17 @@
 <template>
 	<div class='box'>
 		<div class="variable_naming">
-			<div class="variable_naming_header">变量命名</div>
+			<div class="variable_naming_header">
+				<div class="variable_naming_header_title">
+					变量命名
+				</div>
+				<div class="variable_naming_header_edit">
+					<el-radio-group v-model="translation_mode" size="mini" fill="#42b883">
+						<el-radio-button label="通用翻译"></el-radio-button>
+						<el-radio-button label="信息技术"></el-radio-button>
+					</el-radio-group>
+				</div>
+			</div>
 			<div class="variable_naming_content">
 				<div class="variable_naming_item variable_naming_input">
 					<div class="textarea">
@@ -11,6 +21,8 @@
 				<div class="variable_naming_item variable_naming_input" style="overflow: auto;">
 					<!-- 无结果 -->
 					<p v-if="textarea.trim() == ''">译文</p>
+
+					<i v-if="textarea.trim() != '' && Object.keys(data).length === 0" class="el-icon-loading" style="font-size: 30px;"></i>
 
 					<div v-show="textarea.trim() != ''" class="container" v-for="(item, key) in data" :key="key">
 						<h3 class="header">{{ key }}</h3>
@@ -40,19 +52,30 @@ export default {
 			data: {},
 			appid: '20230209001555364', // APPID	
 			key: 'a2CUhlNC3T6DLvq7onl4',	// KEY
+
+			translation_mode: '通用翻译', // 翻译模式
 		};
 	},
 	// 计算属性，会监听依赖属性值随之变化
 	computed: {
+		monitor_translation() {
+			return JSON.stringify(this.textarea + this.translation_mode)
+		}
 	},
 	// 监控data中的数据变化
 	watch: {
-		textarea() {
-			this.translate()
+		monitor_translation() {
+			this.data = {}
+			if (this.translation_mode == '通用翻译') {
+				this.translate()
+			} else {
+				this.translate_it()
+			}
 		}
 	},
 	// 方法集合
 	methods: {
+		// 正常翻译
 		translate() {
 			console.log(this.textarea)
 			if (this.textarea.trim() == '') {
@@ -70,6 +93,33 @@ export default {
 				sign: md5(this.appid + this.textarea + salt + this.key)	// 签名
 			}
 			this.apix('/proxy/api/trans/vip/translate', condition, { method: 'GET' })
+				.then(rv => {
+					console.log(rv)
+					this.result = rv.trans_result[0].dst
+					this.data = this.convertNamingConventions(this.result).data
+					console.log(this.data)
+				})
+		},
+
+		// it 领域翻译
+		translate_it() {
+			console.log(this.textarea)
+			if (this.textarea.trim() == '') {
+				this.result = ''
+				return false
+			}
+
+			let salt = (new Date).getTime()
+			let condition = {
+				q: this.textarea,  // 请求翻译query	
+				appid: this.appid, // APPID	
+				salt: salt, // 随机数
+				from: 'auto', // 翻译源语言
+				to: 'en', // 翻译目标语言	
+				sign: md5(this.appid + this.textarea + salt + 'it' + this.key),	// 签名
+				domain: 'it'
+			}
+			this.apix('/proxy/api/trans/vip/fieldtranslate', condition, { method: 'GET' })
 				.then(rv => {
 					console.log(rv)
 					this.result = rv.trans_result[0].dst
@@ -176,7 +226,7 @@ export default {
 		box-sizing: border-box;
 		border: 1px solid rgb(242, 243, 245);
 		box-shadow: rgba(35, 46, 67, 0.06) 0px 4px 10px;
-		border-radius: 12px;
+		border-radius: 8px;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -188,9 +238,22 @@ export default {
 			width: 100%;
 			height: 50px;
 			border-bottom: 1px solid rgb(227, 228, 229);
-			font-weight: bold;
-			line-height: 50px;
-			text-indent: 2em;
+			.variable_naming_header_title {
+				width: 50%;
+				height: 100%;
+				float: left;
+				font-weight: bold;
+				line-height: 50px;
+				text-indent: 2em;
+			}
+			.variable_naming_header_edit {
+				width: 50%;
+				height: 100%;
+				float: left;
+				line-height: 50px;
+				padding-left:28px;
+				box-sizing: border-box;
+			}
 		}
 
 		.variable_naming_content {

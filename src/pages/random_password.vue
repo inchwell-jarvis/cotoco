@@ -1,8 +1,14 @@
 <template>
 	<div class='box'>
 		<div class="variable_naming">
-			<div class="variable_naming_header">随机ID</div>
-			<div class="variable_naming_content">
+			<div class="variable_naming_header">
+				<div class="variable_naming_header_title">
+					随机密码
+				</div>
+				<div class="variable_naming_header_edit">
+					<el-button type="info" size="mini" @click="copy_all()">复制全部</el-button>
+				</div>
+			</div>			<div class="variable_naming_content">
 				<div class="variable_naming_item variable_naming_input">
 
 					<el-form ref="form" label-width="100px" size="mini">
@@ -106,6 +112,10 @@ export default {
 				}		
 				this.passwords.push(password);
 			}
+		},
+		// 复制全部
+		copy_all(){
+			this.copy(this.passwords.join('\n'))
 		}
 
 	},
@@ -136,7 +146,7 @@ export default {
 		box-sizing: border-box;
 		border: 1px solid rgb(242, 243, 245);
 		box-shadow: rgba(35, 46, 67, 0.06) 0px 4px 10px;
-		border-radius: 12px;
+		border-radius: 8px;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -148,9 +158,22 @@ export default {
 			width: 100%;
 			height: 50px;
 			border-bottom: 1px solid rgb(227, 228, 229);
-			font-weight: bold;
-			line-height: 50px;
-			text-indent: 2em;
+			.variable_naming_header_title {
+				width: 50%;
+				height: 100%;
+				float: left;
+				font-weight: bold;
+				line-height: 50px;
+				text-indent: 2em;
+			}
+			.variable_naming_header_edit {
+				width: 50%;
+				height: 100%;
+				float: left;
+				line-height: 50px;
+				padding-left:28px;
+				box-sizing: border-box;
+			}
 		}
 
 		.variable_naming_content {
